@@ -1,0 +1,588 @@
+/**
+ * @file styles.css
+ * @description Sistema de diseño moderno para PayGraph Backoffice Console.
+ * Consola de liquidación y tesorería con estética profesional bancaria/fintech:
+ * navegación lateral fija, 6 vistas modulares, renderizado de KaTeX, transiciones
+ * suaves en CSS y soporte completo para modo oscuro (por defecto) y claro.
+ */
+
+@import url('../vendor/katex/katex.min.css');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* =========================================================================
+   1. VARIABLES Y TOKENS DEL SISTEMA DE DISEÑO (INSPIRADO EN NEQUI / FINTECH)
+   ========================================================================= */
+:root,
+[data-theme="dark"] {
+  --pg-bg-canvas: #0b0a1a;
+  --pg-bg-canvas-subtle: #100d24;
+  --pg-bg-sidebar: #0f0c23;
+  --pg-bg-surface: #15112e;
+  --pg-bg-surface-hover: #1c173d;
+  --pg-bg-elevated: #201a46;
+  --pg-bg-elevated-hover: #2a225c;
+
+  --pg-text-primary: #f8fafc;
+  --pg-text-secondary: #cbd5e1;
+  --pg-text-muted: #94a3b8;
+
+  --pg-border-subtle: rgba(255, 255, 255, 0.08);
+  --pg-border-strong: rgba(147, 51, 234, 0.28);
+  --pg-border-focus: #7c3aed;
+
+  --pg-accent-primary: #7c3aed;
+  --pg-accent-primary-hover: #6d28d9;
+  --pg-accent-primary-soft: rgba(124, 58, 237, 0.16);
+
+  --pg-accent-secondary: #db2777;
+  --pg-accent-secondary-soft: rgba(219, 39, 119, 0.16);
+
+  --pg-accent-bank: #059669;
+  --pg-accent-bank-soft: rgba(5, 150, 105, 0.16);
+
+  --pg-canvas-edge: #383259;
+
+  --pg-status-success: #10b981;
+  --pg-status-success-bg: rgba(16, 185, 129, 0.14);
+  --pg-status-success-border: rgba(16, 185, 129, 0.35);
+
+  --pg-status-warning: #f59e0b;
+  --pg-status-warning-bg: rgba(245, 158, 11, 0.14);
+  --pg-status-warning-border: rgba(245, 158, 11, 0.35);
+
+  --pg-status-danger: #f43f5e;
+  --pg-status-danger-bg: rgba(244, 63, 94, 0.14);
+  --pg-status-danger-border: rgba(244, 63, 94, 0.35);
+
+  --pg-status-neutral: #94a3b8;
+  --pg-status-neutral-bg: rgba(148, 163, 184, 0.12);
+  --pg-status-neutral-border: rgba(148, 163, 184, 0.25);
+
+  --pg-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.3);
+  --pg-shadow-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --pg-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55);
+
+  --pg-glow-primary: 0 0 24px rgba(124, 58, 237, 0.3);
+  --pg-glow-success: 0 0 24px rgba(16, 185, 129, 0.25);
+}
+
+[data-theme="light"] {
+  --pg-bg-canvas: #fcf8ff;
+  --pg-bg-canvas-subtle: #f6f2ff;
+  --pg-bg-sidebar: #ffffff;
+  --pg-bg-surface: #ffffff;
+  --pg-bg-surface-hover: #fcf8ff;
+  --pg-bg-elevated: #efebff;
+  --pg-bg-elevated-hover: #e3dfff;
+
+  --pg-text-primary: #181445;
+  --pg-text-secondary: #4a4455;
+  --pg-text-muted: #7b7487;
+
+  --pg-border-subtle: rgba(123, 116, 135, 0.15);
+  --pg-border-strong: rgba(99, 14, 212, 0.2);
+  --pg-border-focus: #630ed4;
+
+  --pg-accent-primary: #630ed4;
+  --pg-accent-primary-hover: #5200b3;
+  --pg-accent-primary-soft: rgba(99, 14, 212, 0.10);
+
+  --pg-accent-secondary: #b4136d;
+  --pg-accent-secondary-soft: rgba(180, 19, 109, 0.10);
+
+  --pg-accent-bank: #007650;
+  --pg-accent-bank-soft: rgba(0, 118, 80, 0.10);
+
+  --pg-canvas-edge: #cbd5e1;
+
+  --pg-status-success: #007650;
+  --pg-status-success-bg: rgba(0, 118, 80, 0.10);
+  --pg-status-success-border: rgba(0, 118, 80, 0.30);
+
+  --pg-status-warning: #d97706;
+  --pg-status-warning-bg: rgba(217, 119, 6, 0.10);
+  --pg-status-warning-border: rgba(217, 119, 6, 0.30);
+
+  --pg-status-danger: #ba1a1a;
+  --pg-status-danger-bg: rgba(186, 26, 26, 0.10);
+  --pg-status-danger-border: rgba(186, 26, 26, 0.30);
+
+  --pg-status-neutral: #4a4455;
+  --pg-status-neutral-bg: rgba(74, 68, 85, 0.08);
+  --pg-status-neutral-border: rgba(74, 68, 85, 0.20);
+
+  --pg-shadow-sm: 0 1px 3px rgba(24, 20, 69, 0.06);
+  --pg-shadow-md: 0 6px 18px rgba(24, 20, 69, 0.08);
+  --pg-shadow-lg: 0 14px 34px rgba(24, 20, 69, 0.11);
+
+  --pg-glow-primary: 0 0 20px rgba(99, 14, 212, 0.15);
+  --pg-glow-success: 0 0 20px rgba(0, 118, 80, 0.15);
+}
+
+/* =========================================================================
+   2. REGLAS BASE Y SCROLLBAR MODERNA
+   ========================================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Scrollbar refinada estilo fintech */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.45);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background-color: var(--pg-bg-canvas);
+  color: var(--pg-text-primary);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.font-mono-tabular {
+  font-family: 'JetBrains Mono', monospace;
+  font-feature-settings: 'tnum' on, 'zero' on;
+}
+
+/* =========================================================================
+   3. ESTRUCTURA BACKOFFICE (LAYOUT PRINCIPAL)
+   ========================================================================= */
+.pg-backoffice-shell {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--pg-bg-canvas);
+}
+
+/* Barra Lateral de Navegación */
+.pg-sidebar {
+  width: 270px;
+  min-width: 270px;
+  background-color: var(--pg-bg-sidebar);
+  border-right: 1px solid var(--pg-border-subtle);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.25rem 1rem;
+  z-index: 40;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Área de Contenido Principal */
+.pg-main-viewport {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--pg-bg-canvas);
+}
+
+/* Barra Superior del Backoffice */
+.pg-topbar {
+  background-color: var(--pg-bg-sidebar);
+  border-bottom: 1px solid var(--pg-border-subtle);
+  padding: 0.85rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  backdrop-filter: blur(8px);
+}
+
+/* Vistas Modulares */
+.pg-view {
+  flex: 1;
+  padding: 1.5rem;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  animation: pgFadeIn 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pg-view[hidden] {
+  display: none !important;
+}
+
+/* =========================================================================
+   4. COMPONENTES Y SUPERFICIES DEL BACKOFFICE
+   ========================================================================= */
+.pg-surface {
+  background-color: var(--pg-bg-surface);
+  border: 1px solid var(--pg-border-subtle);
+  box-shadow: var(--pg-shadow-sm);
+  color: var(--pg-text-primary);
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pg-elevated {
+  background-color: var(--pg-bg-elevated);
+  border: 1px solid var(--pg-border-subtle);
+  color: var(--pg-text-primary);
+}
+
+.pg-text-muted {
+  color: var(--pg-text-muted);
+}
+
+/* Botones de navegación lateral */
+.pg-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--pg-text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.pg-nav-btn:hover {
+  color: var(--pg-text-primary);
+  background-color: var(--pg-bg-surface-hover);
+}
+
+.pg-nav-btn.pg-nav-active,
+.pg-nav-btn[aria-current="page"] {
+  color: #ffffff;
+  background-color: var(--pg-accent-primary);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+  font-weight: 700;
+}
+
+[data-theme="light"] .pg-nav-btn.pg-nav-active,
+[data-theme="light"] .pg-nav-btn[aria-current="page"] {
+  color: #ffffff;
+  background-color: var(--pg-accent-primary);
+}
+
+/* Botones Primarios y Secundarios */
+.pg-btn-primary {
+  background: linear-gradient(135deg, var(--pg-accent-primary) 0%, #9333ea 50%, #c026d3 100%);
+  color: #ffffff;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.16s ease, filter 0.16s ease, box-shadow 0.16s ease;
+  box-shadow: var(--pg-glow-primary);
+}
+
+.pg-btn-primary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 25px -4px rgba(124, 58, 237, 0.45);
+}
+
+.pg-btn-primary:active {
+  transform: translateY(0);
+}
+
+.pg-btn-secondary {
+  background-color: var(--pg-bg-elevated);
+  border: 1px solid var(--pg-border-subtle);
+  color: var(--pg-text-primary);
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.pg-btn-secondary:hover {
+  background-color: var(--pg-bg-elevated-hover);
+  border-color: var(--pg-border-strong);
+}
+
+/* Inputs y Selects */
+.pg-input {
+  width: 100%;
+  padding: 0.55rem 0.85rem;
+  border-radius: 0.75rem;
+  background-color: var(--pg-bg-elevated);
+  border: 1px solid var(--pg-border-subtle);
+  color: var(--pg-text-primary);
+  outline: none;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.pg-input:focus {
+  border-color: var(--pg-border-focus);
+  box-shadow: 0 0 0 3px var(--pg-accent-primary-soft);
+}
+
+.pg-input[aria-invalid="true"] {
+  border-color: var(--pg-status-danger);
+  box-shadow: 0 0 0 3px var(--pg-status-danger-bg);
+}
+
+/* Píldoras de Cuentas Billetera (Estilo Tarjeta de Ahorros Nequi) */
+.pg-account-pill {
+  background-color: var(--pg-bg-surface);
+  border: 1px solid var(--pg-border-subtle);
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.pg-account-pill:hover {
+  transform: translateY(-2px);
+  border-color: var(--pg-accent-primary);
+  box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.25);
+}
+
+.pg-account-pill.pg-account-origin {
+  border-color: var(--pg-accent-primary);
+  background-color: var(--pg-accent-primary-soft);
+  box-shadow: 0 0 0 2px var(--pg-accent-primary), 0 8px 25px -4px rgba(124, 58, 237, 0.35);
+}
+
+.pg-account-pill.pg-account-destination {
+  border-color: var(--pg-status-success);
+  background-color: var(--pg-status-success-bg);
+  box-shadow: 0 0 0 2px var(--pg-status-success), 0 8px 25px -4px rgba(16, 185, 129, 0.35);
+}
+
+/* Comprobante / Voucher de Liquidación Digital (Estilo Recibo Oficial PurpPay / Nequi) */
+.pg-voucher-card {
+  background-color: var(--pg-bg-surface);
+  border: 1px solid var(--pg-border-subtle);
+  border-radius: 1.5rem;
+  box-shadow: var(--pg-shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Estados Semánticos (Success, Warning, Danger, Neutral) */
+.pg-status-success {
+  background-color: var(--pg-status-success-bg);
+  color: var(--pg-status-success);
+  border: 1px solid var(--pg-status-success-border);
+}
+
+.pg-status-warning {
+  background-color: var(--pg-status-warning-bg);
+  color: var(--pg-status-warning);
+  border: 1px solid var(--pg-status-warning-border);
+}
+
+.pg-status-danger {
+  background-color: var(--pg-status-danger-bg);
+  color: var(--pg-status-danger);
+  border: 1px solid var(--pg-status-danger-border);
+}
+
+.pg-status-neutral {
+  background-color: var(--pg-status-neutral-bg);
+  color: var(--pg-status-neutral);
+  border: 1px solid var(--pg-status-neutral-border);
+}
+
+/* Chips de acción */
+.pg-chip-action {
+  background-color: var(--pg-bg-elevated);
+  border: 1px solid var(--pg-border-subtle);
+  color: var(--pg-text-primary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-weight: 600;
+}
+
+.pg-chip-action:hover {
+  background-color: var(--pg-accent-primary-soft);
+  border-color: var(--pg-accent-primary);
+  color: var(--pg-accent-primary);
+}
+
+/* Árbol de decisión visual */
+.pg-tree-node {
+  background-color: var(--pg-bg-surface);
+  border: 1px solid var(--pg-border-subtle);
+  border-radius: 0.85rem;
+  padding: 0.75rem;
+  transition: all 0.22s ease;
+}
+
+.pg-tree-node-active-normal {
+  border-color: var(--pg-status-success);
+  background-color: var(--pg-status-success-bg);
+}
+
+.pg-tree-node-active-fraud {
+  border-color: var(--pg-status-danger);
+  background-color: var(--pg-status-danger-bg);
+}
+
+/* Tablas del Backoffice */
+.pg-table-wrap {
+  overflow-x: auto;
+  border-radius: 1rem;
+  border: 1px solid var(--pg-border-subtle);
+  background-color: var(--pg-bg-surface);
+}
+
+/* Bloques LaTeX con KaTeX */
+.pg-math-block {
+  font-size: 0.9375rem;
+  color: var(--pg-text-primary);
+}
+
+.pg-math-inline {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.katex {
+  font-size: 1.05em !important;
+}
+
+.katex-display {
+  margin: 0.4rem 0 !important;
+}
+
+/* Cajón técnico (Inspector Paso a Paso) */
+.pg-drawer {
+  background-color: var(--pg-bg-surface);
+  border: 1px solid var(--pg-border-subtle);
+  box-shadow: var(--pg-shadow-lg);
+}
+
+.pg-tab {
+  border: none;
+  background: transparent;
+  color: var(--pg-text-muted);
+  font-weight: 600;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.pg-tab:hover {
+  color: var(--pg-text-primary);
+  background-color: var(--pg-bg-elevated);
+}
+
+.pg-tab[aria-selected="true"] {
+  background-color: var(--pg-accent-primary);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* =========================================================================
+   5. ANIMACIONES SUAVES Y TRANSICIONES
+   ========================================================================= */
+@keyframes pgFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pgPulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(99, 102, 241, 0);
+  }
+}
+
+@keyframes pgShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+.pg-shake {
+  animation: pgShake 0.18s ease-in-out;
+}
+
+.animate-fade-in {
+  animation: pgFadeIn 0.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Desplegable de escenarios con efecto glassmorphism */
+#panel-escenarios {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--pg-border-strong);
+}
+
+[data-theme="light"] #panel-escenarios {
+  box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.15), 0 0 0 1px var(--pg-border-strong);
+}
+
+.touch-target {
+  min-height: 40px;
+}
+
+/* Desactivación estricta de animaciones si el usuario lo configuró en el SO */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =========================================================================
+   6. RESPONSIVE Y MÓVIL
+   ========================================================================= */
+@media (max-width: 1024px) {
+  .pg-sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    box-shadow: var(--pg-shadow-lg);
+  }
+
+  .pg-sidebar.pg-sidebar-open {
+    transform: translateX(0);
+  }
+
+  .pg-sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 35;
+    backdrop-filter: blur(2px);
+  }
+
+  .pg-sidebar-backdrop.pg-backdrop-open {
+    display: block;
+  }
+}

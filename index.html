@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PayGraph — Consola Backoffice de Pagos Digitales e IA (UDES)</title>
+  <!-- Tipografías modernas: Plus Jakarta Sans y JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <!-- KaTeX local (sin CDN, funciona 100% offline con file://) -->
+  <link rel="stylesheet" href="vendor/katex/katex.min.css" />
+  <script src="vendor/katex/katex.min.js"></script>
+  <!-- Tailwind CSS v3.4.17 (versión fija por CDN) -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <!-- Lucide Icons v0.469.0 (versión fija con verificación de integridad SRI) -->
+  <script
+    src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"
+    integrity="sha384-hJnF5AwidE18GSWTAGHv3ByzzvfNZ1Tcx5y1UUV3WkauuMCEzBJBMSwSt/PUPXnM"
+    crossorigin="anonymous"
+  ></script>
+  <!-- Hoja de estilos del Backoffice -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="pg-backoffice-shell select-none">
+  <!-- Telón de fondo para menú en móvil -->
+  <div id="sidebar-backdrop" class="pg-sidebar-backdrop"></div>
+
+  <!-- BARRA LATERAL (SIDEBAR DE NAVEGACIÓN PROFESIONAL) -->
+  <aside id="sidebar-principal" class="pg-sidebar" aria-label="Navegación principal del Backoffice">
+    <div class="space-y-6">
+      <!-- Identidad y Marca Backoffice -->
+      <div class="space-y-2">
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center justify-center w-10 h-10 rounded-2xl pg-btn-primary font-mono-tabular font-extrabold text-base shadow-sm">
+            PG
+          </span>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-base font-extrabold tracking-tight">PayGraph</span>
+              <span class="text-[9.5px] font-extrabold uppercase px-1.5 py-0.5 rounded-full bg-purple-500/20 text-purple-400">
+                PRO
+              </span>
+            </div>
+            <p class="text-[11px] pg-text-muted font-medium">Consola de Pagos · UDES</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 px-2.5 py-1.5 rounded-xl pg-elevated text-[11px]">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="font-bold text-emerald-400">Motor Transaccional Activo</span>
+        </div>
+      </div>
+
+      <!-- Menú de Vistas (6 apartados independientes) -->
+      <nav class="space-y-1.5" aria-label="Secciones del sistema">
+        <button
+          type="button"
+          data-vista="panel"
+          class="pg-nav-btn"
+          aria-current="false"
+        >
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="7" height="9" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="5" rx="1"></rect>
+            <rect x="14" y="12" width="7" height="9" rx="1"></rect>
+            <rect x="3" y="16" width="7" height="5" rx="1"></rect>
+          </svg>
+          <span>1. Panel General</span>
+        </button>
+
+        <button
+          type="button"
+          data-vista="operar"
+          class="pg-nav-btn pg-nav-active"
+          aria-current="page"
+        >
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+          </svg>
+          <span>2. Operar Transferencia</span>
+        </button>
+
+        <button
+          type="button"
+          data-vista="red"
+          class="pg-nav-btn"
+          aria-current="false"
+        >
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+          <span>3. Red Interbancaria</span>
+        </button>
+
+        <button
+          type="button"
+          data-vista="pasos"
+          class="pg-nav-btn"
+          aria-current="false"
+        >
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span>4. Paso a Paso</span>
+        </button>
+
+        <button
+          type="button"
+          data-vista="fundamentos"
+          class="pg-nav-btn"
+          aria-current="false"
+        >
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+          </svg>
+          <span>5. Fundamentos</span>
+        </button>
+
+        <button
+          type="button"
+          data-vista="auditoria"
+          class="pg-nav-btn"
+          aria-current="false"
+        >
+          <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span>6. Auditoría y Trazas</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- Pie del Sidebar con Invariante y Créditos Académicos -->
+    <div class="pt-4 border-t border-slate-500/15 space-y-2.5">
+      <div class="p-2.5 rounded-xl pg-elevated text-xs space-y-1">
+        <div class="text-[10px] font-extrabold uppercase tracking-wider pg-text-muted">
+          Invariante Global de Masa
+        </div>
+        <div id="chip-invariante" class="font-mono-tabular font-extrabold text-xs text-purple-400">
+          Comisiones red: $0
+        </div>
+      </div>
+      <p class="text-[10px] pg-text-muted leading-tight">
+        Simulador de aula · Matemáticas Discretas e IA · Universidad de Santander
+      </p>
+    </div>
+  </aside>
+
+  <!-- ÁREA DE CONTENIDO PRINCIPAL (MAIN VIEWPORT) -->
+  <div class="pg-main-viewport">
+    <!-- BARRA SUPERIOR (TOPBAR) -->
+    <header class="pg-topbar">
+      <!-- Izquierda: Toggle móvil y títulos dinámicos -->
+      <div class="flex items-center gap-3 min-w-0">
+        <button
+          id="btn-toggle-sidebar"
+          type="button"
+          class="lg:hidden pg-btn-secondary px-3 py-1.5 rounded-xl text-xs font-bold inline-flex items-center gap-1.5"
+          aria-label="Alternar menú lateral"
+        >
+          <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+          <span>Menú</span>
+        </button>
+        <div class="min-w-0">
+          <h2 id="cabecera-titulo" class="text-sm sm:text-base font-extrabold leading-tight truncate">
+            Terminal de Órdenes · Liquidación de Pagos
+          </h2>
+          <p id="cabecera-subtitulo" class="text-xs pg-text-muted truncate hidden sm:block">
+            Liquidación de Pagos Interbancarios y Prevención de Fraude en Tiempo Real
+          </p>
+        </div>
+      </div>
+
+      <!-- Derecha: Casos rápidos S1..S4 + Controles de vista -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <!-- Desplegable elegante de Escenarios Didácticos (S1 a S4) -->
+        <div class="relative" id="dropdown-escenarios-wrap">
+          <button
+            id="btn-menu-escenarios"
+            type="button"
+            aria-expanded="false"
+            aria-haspopup="true"
+            aria-controls="panel-escenarios"
+            class="pg-btn-secondary touch-target px-3 py-1.5 rounded-xl text-xs font-bold inline-flex items-center gap-2 hover:border-purple-500/50 transition-all shadow-sm"
+            title="Cargar escenarios didácticos preconfigurados (S1 a S4)"
+          >
+            <svg class="w-3.5 h-3.5 text-purple-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            <span class="hidden sm:inline">Escenarios Didácticos</span>
+            <span class="sm:hidden">Casos</span>
+            <span class="text-[10px] opacity-60">▾</span>
+          </button>
+
+          <nav
+            id="panel-escenarios"
+            aria-label="Casos de prueba preconfigurados"
+            class="hidden absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl pg-surface shadow-2xl border border-slate-500/25 p-3 z-50 space-y-1.5 backdrop-blur-xl animate-fade-in"
+          >
+            <div class="px-2 pb-2 text-[10.5px] font-extrabold uppercase tracking-wider text-slate-400 border-b border-slate-500/15 flex items-center justify-between">
+              <span>Casos de Prueba (S1 – S4)</span>
+              <span class="text-[9.5px] font-mono-tabular px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-400 font-bold">UDES Lab</span>
+            </div>
+            <div id="contenedor-escenarios" class="space-y-1.5 pt-1"></div>
+          </nav>
+        </div>
+
+        <!-- Input invisible para compatibilidad funcional con el renderizador de red -->
+        <input id="toggle-comisiones" type="checkbox" class="hidden" />
+
+        <button
+          id="btn-reiniciar"
+          type="button"
+          class="pg-btn-secondary px-3 py-1.5 rounded-xl text-xs font-bold inline-flex items-center gap-1.5 hover:border-purple-500/30 transition-all"
+          title="Restaurar saldos originales"
+        >
+          <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+          <span class="hidden sm:inline">Restaurar</span>
+        </button>
+
+        <button
+          id="btn-tema"
+          type="button"
+          class="pg-btn-secondary px-3 py-1.5 rounded-xl text-xs font-bold inline-flex items-center gap-1.5 hover:border-purple-500/30 transition-all"
+          aria-label="Cambiar entre tema claro y oscuro"
+        >
+          <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          <span id="etiqueta-tema">Modo claro</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- =======================================================================
+         VISTA 1: PANEL GENERAL (TESORERÍA, KPIS, SALDOS Y LIBRO MAYOR)
+         ======================================================================= -->
+    <section id="vista-panel" class="pg-view" hidden aria-label="Panel general de tesorería">
+      <div class="space-y-6">
+        <!-- Tarjetas KPI Superiores con fórmulas LaTeX animadas -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- KPI 1: Masa Monetaria Global -->
+          <div class="pg-surface rounded-2xl p-4 space-y-2">
+            <div class="flex items-center justify-between text-xs pg-text-muted font-bold">
+              <span>Masa Monetaria (Saldos)</span>
+              <svg class="w-4 h-4 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                <line x1="2" y1="10" x2="22" y2="10"></line>
+              </svg>
+            </div>
+            <div id="kpi-masa-monetaria" class="text-xl sm:text-2xl font-extrabold font-mono-tabular text-purple-400">
+              $78.500.000
+            </div>
+            <div id="kpi-badge-invariante" class="text-[11px] font-bold text-emerald-400">
+              ✓ Invariante exacto ($78.500.000)
+            </div>
+            <div id="formula-invariante-kpi" class="hidden"></div>
+          </div>
+
+          <!-- KPI 2: Comisiones Acumuladas -->
+          <div class="pg-surface rounded-2xl p-4 space-y-2">
+            <div class="flex items-center justify-between text-xs pg-text-muted font-bold">
+              <span>Bolsa de Comisiones Red</span>
+              <svg class="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="3" y1="21" x2="21" y2="21"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+                <polyline points="5 6 12 3 19 6"></polyline>
+                <line x1="4" y1="10" x2="4" y2="21"></line>
+                <line x1="20" y1="10" x2="20" y2="21"></line>
+                <line x1="8" y1="14" x2="8" y2="17"></line>
+                <line x1="12" y1="14" x2="12" y2="17"></line>
+                <line x1="16" y1="14" x2="16" y2="17"></line>
+              </svg>
+            </div>
+            <div id="kpi-comisiones-total" class="text-xl sm:text-2xl font-extrabold font-mono-tabular text-emerald-400">
+              $0
+            </div>
+            <div class="text-[11px] pg-text-muted">
+              Suma de costos de intermediación
+            </div>
+          </div>
+
+          <!-- KPI 3: Operaciones y Tasa de Aprobación -->
+          <div class="pg-surface rounded-2xl p-4 space-y-2">
+            <div class="flex items-center justify-between text-xs pg-text-muted font-bold">
+              <span>Órdenes Procesadas</span>
+              <svg class="w-4 h-4 text-purple-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+            </div>
+            <div id="kpi-operaciones-total" class="text-xl sm:text-2xl font-extrabold font-mono-tabular">
+              0
+            </div>
+            <div id="kpi-tasa-aprobacion" class="text-[11px] font-bold text-purple-400">
+              Tasa de aprobación: 100%
+            </div>
+            <div id="formula-regla-kpi" class="hidden"></div>
+          </div>
+
+          <!-- KPI 4: Rendimiento y Latencia Algorítmica -->
+          <div class="pg-surface rounded-2xl p-4 space-y-2">
+            <div class="flex items-center justify-between text-xs pg-text-muted font-bold">
+              <span>Latencia Media</span>
+              <svg class="w-4 h-4 text-teal-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <div id="kpi-latencia-media" class="text-xl sm:text-2xl font-extrabold font-mono-tabular text-teal-400">
+              0.00 ms
+            </div>
+            <div class="text-[11px] font-bold text-emerald-400">
+              ✓ Rendimiento óptimo (< 100 ms)
+            </div>
+            <div id="formula-complejidad-kpi" class="hidden"></div>
+          </div>
+        </div>
+
+        <!-- Tabla de Liquidez y Saldos por Entidad -->
+        <div class="pg-surface rounded-2xl p-5 space-y-4">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div>
+              <h3 class="text-sm font-extrabold uppercase tracking-wider text-purple-400">
+                Estado de Liquidez por Entidad Bancaria y Usuario
+              </h3>
+              <p class="text-xs pg-text-muted">
+                Distribución porcentual en tiempo real respecto a la masa monetaria total
+              </p>
+            </div>
+            <span class="text-xs font-mono-tabular pg-elevated px-2.5 py-1 rounded-full font-bold">
+              5 Cuentas Registradas
+            </span>
+          </div>
+
+          <div class="pg-table-wrap">
+            <table class="w-full text-xs text-left border-collapse">
+              <thead>
+                <tr class="border-b border-slate-500/20 text-xs font-extrabold pg-text-muted">
+                  <th class="py-2.5 px-3">Cuenta / Entidad</th>
+                  <th class="py-2.5 px-3 text-right">Saldo Inicial</th>
+                  <th class="py-2.5 px-3 text-right">Saldo Actual</th>
+                  <th class="py-2.5 px-3 text-right">Variación (Δ)</th>
+                  <th class="py-2.5 px-3">Participación en Masa</th>
+                  <th class="py-2.5 px-3 text-right">Operar</th>
+                </tr>
+              </thead>
+              <tbody id="cuerpo-tabla-liquidez"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Libro Mayor de Operaciones (Ledger) -->
+        <div class="pg-surface rounded-2xl p-5 space-y-4">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div>
+              <h3 class="text-sm font-extrabold uppercase tracking-wider text-purple-400">
+                Libro Mayor de Órdenes Recientes
+              </h3>
+              <p class="text-xs pg-text-muted">
+                Historial transaccional con verificación de seguridad y estado de liquidación
+              </p>
+            </div>
+          </div>
+
+          <div class="pg-table-wrap">
+            <table class="w-full text-xs text-left border-collapse">
+              <thead>
+                <tr class="border-b border-slate-500/20 text-xs font-extrabold pg-text-muted">
+                  <th class="py-2.5 px-3">ID</th>
+                  <th class="py-2.5 px-3">Ruta</th>
+                  <th class="py-2.5 px-3 text-right">Monto</th>
+                  <th class="py-2.5 px-3 text-right">Comisión</th>
+                  <th class="py-2.5 px-3">Cifrado</th>
+                  <th class="py-2.5 px-3">Validación</th>
+                  <th class="py-2.5 px-3 text-right">Estado / Detalle</th>
+                </tr>
+              </thead>
+              <tbody id="cuerpo-libro-operaciones"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         VISTA 2: OPERAR TRANSFERENCIA (BILLETERA, FORMULARIO Y RESUMEN EN VIVO)
+         ======================================================================= -->
+    <section id="vista-operar" class="pg-view" aria-label="Terminal de transferencias">
+      <div class="space-y-5">
+        <!-- Franja superior de Cuentas Billetera (selección rápida) -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="text-xs font-extrabold uppercase tracking-wider pg-text-muted">
+              Cuentas Activas · Haz clic para elegir quién envía o quién recibe
+            </h3>
+            <span class="text-[11px] pg-text-muted font-medium">
+              1.er clic: Envía · 2.º clic: Recibe
+            </span>
+          </div>
+          <div id="contenedor-tarjetas-cuentas" class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-2.5"></div>
+        </div>
+
+        <!-- Grilla principal de Operación: Formulario + Comprobante en Vivo -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+          <!-- Columna Izquierda (7/12): Formulario de Envío Digital -->
+          <aside
+            id="tarjeta-transferencia"
+            class="lg:col-span-7 pg-surface rounded-3xl p-5 sm:p-6 space-y-4"
+          >
+            <div class="flex items-center justify-between border-b border-slate-500/15 pb-3">
+              <div>
+                <h3 class="text-base sm:text-lg font-extrabold">Nueva Orden de Transferencia</h3>
+                <p class="text-xs pg-text-muted">Envío seguro con verificación criptográfica y análisis de riesgo en tiempo real</p>
+              </div>
+              <span id="chip-latencia" class="pg-elevated font-mono-tabular text-xs font-bold px-2.5 py-1 rounded-full">
+                0.00 ms
+              </span>
+            </div>
+
+            <form id="form-transferencia" novalidate class="space-y-4">
+              <!-- Cuentas Origen y Destino -->
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+                <div class="sm:col-span-5">
+                  <div class="flex items-center justify-between mb-1">
+                    <label for="select-origen" class="block text-xs font-bold">
+                      Cuenta Origen (De)
+                    </label>
+                    <span class="text-[10px] font-extrabold text-purple-400">ENVÍA</span>
+                  </div>
+                  <select id="select-origen" name="origen" class="pg-input font-semibold text-xs"></select>
+                  <p id="error-origen" role="alert" class="hidden text-[11px] font-bold text-rose-400 mt-1"></p>
+                </div>
+
+                <div class="sm:col-span-2 flex justify-center pt-4">
+                  <button
+                    id="btn-invertir-cuentas"
+                    type="button"
+                    class="pg-chip-action w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold"
+                    title="Invertir cuentas origen y destino"
+                  >
+                    <svg class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <polyline points="17 1 21 5 17 9"></polyline>
+                      <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                      <polyline points="7 23 3 19 7 15"></polyline>
+                      <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="sm:col-span-5">
+                  <div class="flex items-center justify-between mb-1">
+                    <label for="select-destino" class="block text-xs font-bold">
+                      Cuenta Destino (Para)
+                    </label>
+                    <span class="text-[10px] font-extrabold text-emerald-400">RECIBE</span>
+                  </div>
+                  <select id="select-destino" name="destino" class="pg-input font-semibold text-xs"></select>
+                  <p id="error-destino" role="alert" class="hidden text-[11px] font-bold text-rose-400 mt-1"></p>
+                </div>
+              </div>
+
+              <!-- Monto y PIN -->
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                <div class="sm:col-span-7">
+                  <div class="flex items-center justify-between mb-1">
+                    <label for="input-monto" class="block text-xs font-bold">
+                      Monto a transferir (COP)
+                    </label>
+                    <span class="text-[10px] pg-text-muted">Límite sin alerta: $5.000.000</span>
+                  </div>
+                  <input
+                    id="input-monto"
+                    name="monto"
+                    type="number"
+                    min="1"
+                    step="1"
+                    value="500000"
+                    class="pg-input font-mono-tabular font-bold text-sm"
+                  />
+                  <p id="error-monto" role="alert" class="hidden text-[11px] font-bold text-rose-400 mt-1"></p>
+                </div>
+
+                <div class="sm:col-span-5">
+                  <div class="flex items-center justify-between mb-1">
+                    <label for="input-pin" class="block text-xs font-bold">
+                      PIN de seguridad
+                    </label>
+                    <button
+                      id="btn-autocompletar-pin"
+                      type="button"
+                      class="text-[10px] font-bold text-purple-400 hover:underline inline-flex items-center gap-1"
+                    >
+                      <svg class="w-3 h-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="7.5" cy="15.5" r="5.5"></circle>
+                        <path d="m21 2-9.6 9.6"></path>
+                        <path d="m15.5 7.5 3 3L22 7l-3-3"></path>
+                      </svg>
+                      <span>Usar PIN</span>
+                    </button>
+                  </div>
+                  <input
+                    id="input-pin"
+                    name="pin"
+                    type="password"
+                    maxlength="4"
+                    value="1234"
+                    placeholder="••••"
+                    class="pg-input font-mono-tabular font-bold tracking-widest text-sm"
+                  />
+                  <p id="error-pin" role="alert" class="hidden text-[11px] font-bold text-rose-400 mt-1"></p>
+                </div>
+              </div>
+
+              <!-- Montos rápidos -->
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="text-[11px] pg-text-muted font-semibold">Montos rápidos:</span>
+                <button type="button" data-monto-rapido="100000" class="pg-chip-action px-2.5 py-1 rounded-full text-xs font-semibold">
+                  $100.000
+                </button>
+                <button type="button" data-monto-rapido="500000" class="pg-chip-action px-2.5 py-1 rounded-full text-xs font-semibold">
+                  $500.000
+                </button>
+                <button type="button" data-monto-rapido="2000000" class="pg-chip-action px-2.5 py-1 rounded-full text-xs font-semibold">
+                  $2.000.000
+                </button>
+                <button type="button" data-monto-rapido="6000000" class="pg-chip-action px-2.5 py-1 rounded-full text-xs font-semibold text-amber-400">
+                  $6.000.000 (Alerta de Fraude)
+                </button>
+              </div>
+
+              <!-- Desglose de Liquidación -->
+              <div class="pg-elevated rounded-2xl p-4 space-y-2 text-xs border border-slate-500/15">
+                <div class="flex items-center justify-between">
+                  <span class="pg-text-muted">Acreditar a destino</span>
+                  <span id="resumen-costo-monto" class="font-mono-tabular font-bold text-sm">$500.000</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="pg-text-muted">Comisión de red bancaria</span>
+                  <span id="resumen-costo-comision" class="font-mono-tabular font-bold text-emerald-400">$800</span>
+                </div>
+                <div class="pt-2 border-t border-slate-500/15 flex items-center justify-between text-sm font-extrabold">
+                  <span>Total a debitar de origen</span>
+                  <span id="resumen-costo-total" class="font-mono-tabular text-purple-400 font-extrabold text-base">$500.800</span>
+                </div>
+              </div>
+
+              <!-- Botón Primario Transferir -->
+              <button
+                id="btn-transferir"
+                type="submit"
+                class="pg-btn-primary touch-target w-full py-3 px-5 rounded-2xl text-sm font-extrabold inline-flex items-center justify-center gap-2"
+              >
+                <span>Liquidar transferencia ahora</span>
+                <span aria-hidden="true">→</span>
+              </button>
+            </form>
+          </aside>
+
+          <!-- Columna Derecha (5/12): Comprobante y 3 Pilares en Vivo -->
+          <div class="lg:col-span-5 space-y-4">
+            <!-- Comprobante / Voucher de Liquidación en Vivo -->
+            <div
+              id="banner-resultado"
+              role="status"
+              aria-live="polite"
+              class="pg-voucher-card relative overflow-hidden rounded-3xl p-5 sm:p-6 text-xs space-y-3.5 transition-all shadow-md pg-status-neutral"
+            >
+              <!-- Cinta decorativa superior estilo Nequi / PurpPay -->
+              <div class="h-1.5 w-full bg-gradient-to-r from-purple-600 via-fuchsia-500 to-emerald-400 absolute top-0 left-0"></div>
+
+              <!-- Cabecera del Comprobante -->
+              <div class="flex items-center justify-between pt-1 border-b border-slate-500/15 pb-2.5">
+                <div class="flex items-center gap-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-purple-500 animate-pulse"></span>
+                  <span class="font-extrabold uppercase tracking-wider text-[10px] text-purple-400">
+                    Comprobante de Liquidación Digital
+                  </span>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[9.5px] font-mono-tabular font-bold bg-purple-500/15 text-purple-400">
+                  En Vivo
+                </span>
+              </div>
+
+              <!-- Veredicto Principal -->
+              <div class="flex items-center gap-2.5 font-extrabold text-sm sm:text-base">
+                <span id="icono-resultado" class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs shrink-0 pg-elevated" aria-hidden="true">✓</span>
+                <span id="titulo-resultado" class="leading-tight">Terminal Lista para Operar</span>
+              </div>
+
+              <!-- Lista de Razones y Auditoría de la Transacción -->
+              <ul id="lista-razones-resultado" class="pl-4 list-disc space-y-1.5 leading-relaxed font-medium">
+                <li>Selecciona las cuentas origen y destino o carga un caso didáctico desde el menú superior.</li>
+              </ul>
+
+              <!-- Sello Criptográfico Inferior -->
+              <div class="pt-2.5 border-t border-slate-500/15 flex items-center justify-between text-[10.5px] pg-text-muted">
+                <span class="flex items-center gap-1.5 font-mono-tabular">
+                  <svg class="w-3.5 h-3.5 text-purple-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                  <span>Cifrado de extremo a extremo</span>
+                </span>
+                <span class="font-bold text-emerald-400">Verificado</span>
+              </div>
+            </div>
+
+            <!-- Tarjetas de Acceso Rápido a los 3 Pilares -->
+            <div class="space-y-2.5">
+              <button
+                id="card-resumen-rsa"
+                type="button"
+                class="w-full pg-surface border-l-4 border-l-purple-500 rounded-2xl p-3.5 text-left hover:border-purple-500/80 hover:-translate-y-0.5 transition-all flex flex-col justify-between gap-1 cursor-pointer shadow-sm hover:shadow-md"
+              >
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-extrabold uppercase tracking-wider text-purple-400">
+                    1. Seguridad y Cifrado
+                  </span>
+                  <svg class="w-3.5 h-3.5 text-purple-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                  </svg>
+                </div>
+                <div id="texto-resumen-rsa" class="text-xs font-mono-tabular font-extrabold truncate">
+                  Token Criptográfico Protegido
+                </div>
+                <div id="sub-resumen-rsa" class="text-[11px] pg-text-muted truncate">
+                  Credenciales cifradas de extremo a extremo
+                </div>
+              </button>
+
+              <button
+                id="card-resumen-grafo"
+                type="button"
+                class="w-full pg-surface border-l-4 border-l-emerald-500 rounded-2xl p-3.5 text-left hover:border-emerald-500/80 hover:-translate-y-0.5 transition-all flex flex-col justify-between gap-1 cursor-pointer shadow-sm hover:shadow-md"
+              >
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-extrabold uppercase tracking-wider text-emerald-400">
+                    2. Ruta de Red
+                  </span>
+                  <svg class="w-3.5 h-3.5 text-emerald-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                  </svg>
+                </div>
+                <div id="texto-resumen-grafo" class="text-xs font-mono-tabular font-extrabold truncate">
+                  Canal de Liquidación Óptimo
+                </div>
+                <div id="sub-resumen-grafo" class="text-[11px] pg-text-muted truncate">
+                  Ruta interbancaria de menor comisión
+                </div>
+              </button>
+
+              <button
+                id="card-resumen-logica"
+                type="button"
+                class="w-full pg-surface border-l-4 border-l-amber-500 rounded-2xl p-3.5 text-left hover:border-amber-500/80 hover:-translate-y-0.5 transition-all flex flex-col justify-between gap-1 cursor-pointer shadow-sm hover:shadow-md"
+              >
+                <div class="flex items-center justify-between">
+                  <span class="text-[10px] font-extrabold uppercase tracking-wider text-amber-400">
+                    3. Control de Riesgo y Fraude
+                  </span>
+                  <svg class="w-3.5 h-3.5 text-amber-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                  </svg>
+                </div>
+                <div id="texto-resumen-logica" class="text-xs font-extrabold truncate">
+                  Supervisión de Transacción
+                </div>
+                <div id="sub-resumen-logica" class="text-[11px] pg-text-muted truncate">
+                  Validación de fondos, clave y alerta de fraude
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         VISTA 3: RED INTERBANCARIA (GRAFO COMPLETO, MATRICES M Y D, DIJKSTRA)
+         ======================================================================= -->
+    <section id="vista-red" class="pg-view" hidden aria-label="Red interbancaria y topología">
+      <div class="space-y-6">
+        <!-- Tarjeta del Mapa Interactivo del Grafo -->
+        <div class="pg-surface rounded-3xl p-5 space-y-3 relative overflow-hidden">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-500/15 pb-3">
+            <div>
+              <h3 class="text-base font-extrabold">Topología Espacial de la Red Bancaria G = (V, E, w)</h3>
+              <p class="text-xs pg-text-muted">
+                5 cuentas interconectadas por 7 canales simétricos con ponderación w(u,v)
+              </p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="chip-ahorro-ruta" class="text-xs font-bold px-3 py-1 rounded-full pg-status-success">
+                ✦ Ahorro frente al enlace directo
+              </span>
+            </div>
+          </div>
+
+          <div class="relative w-full h-[380px] sm:h-[430px] flex items-center justify-center">
+            <canvas
+              id="lienzo-grafo"
+              tabindex="0"
+              role="application"
+              aria-label="Lienzo interactivo del grafo de pagos con 5 nodos. Haz clic en un nodo para seleccionarlo."
+              class="w-full h-full block rounded-2xl"
+            ></canvas>
+          </div>
+
+          <div class="pt-3 border-t border-slate-500/15 flex flex-wrap items-center justify-between gap-2 text-xs">
+            <span id="vista-previa-ruta" class="font-bold font-mono-tabular">
+              Ruta activa: v₀ → v₁ → v₄ · Comisión mínima: $800
+            </span>
+            <span class="pg-text-muted text-[11px]">
+              Usa las flechas y Enter o haz clic sobre los nodos para cambiar la ruta
+            </span>
+          </div>
+        </div>
+
+        <!-- Matrices M y D en LaTeX + Tabla de Relajación de Dijkstra -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+          <!-- Matrices M y D en LaTeX -->
+          <div class="lg:col-span-6 space-y-4">
+            <div class="pg-surface rounded-2xl p-5 space-y-3">
+              <div class="flex items-center justify-between">
+                <h4 class="text-xs font-extrabold uppercase tracking-wider text-purple-400">
+                  Matriz de Adyacencia M (Costos w(u, v))
+                </h4>
+                <span class="text-xs font-mono-tabular pg-elevated px-2 py-0.5 rounded">Simétrica</span>
+              </div>
+              <p class="text-xs pg-text-muted">
+                M[i][j] representa la comisión del canal directo entre vᵢ y vⱼ (∞ indica ausencia de enlace).
+              </p>
+              <div id="matriz-m-latex" class="pg-elevated rounded-xl p-3 text-xs overflow-x-auto"></div>
+            </div>
+
+            <div class="pg-surface rounded-2xl p-5 space-y-3">
+              <div class="flex items-center justify-between">
+                <h4 class="text-xs font-extrabold uppercase tracking-wider text-emerald-400">
+                  Matriz D de Costos Mínimos (Dijkstra / Floyd-Warshall)
+                </h4>
+                <span class="text-xs font-mono-tabular pg-elevated px-2 py-0.5 rounded">D[i][j] = min W(P)</span>
+              </div>
+              <p class="text-xs pg-text-muted">
+                D[i][j] es la comisión mínima entre todo par de cuentas verificada con Floyd-Warshall O(|V|³).
+              </p>
+              <div id="matriz-d-latex" class="pg-elevated rounded-xl p-3 text-xs overflow-x-auto"></div>
+            </div>
+          </div>
+
+          <!-- Tabla de Relajación de Dijkstra para el Par Activo -->
+          <div class="lg:col-span-6 pg-surface rounded-2xl p-5 space-y-3.5">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-teal-400">
+                Relajación de Dijkstra para el Par Seleccionado
+              </h4>
+              <span class="text-xs font-mono-tabular pg-elevated px-2 py-0.5 rounded font-bold">O(|V|²)</span>
+            </div>
+            <div id="formula-ruta-activa-red" class="pg-elevated rounded-xl p-3 text-xs overflow-x-auto font-bold"></div>
+
+            <div class="pg-table-wrap">
+              <table class="w-full text-xs text-left border-collapse">
+                <thead>
+                  <tr class="border-b border-slate-500/20 text-xs font-extrabold pg-text-muted text-center">
+                    <th class="py-2 px-2.5 text-left">Paso (k)</th>
+                    <th class="py-2 px-2.5 text-left">Nodo Fijado u*</th>
+                    <th class="py-2 px-2">dist[v₀]</th>
+                    <th class="py-2 px-2">dist[v₁]</th>
+                    <th class="py-2 px-2">dist[v₂]</th>
+                    <th class="py-2 px-2">dist[v₃]</th>
+                    <th class="py-2 px-2">dist[v₄]</th>
+                  </tr>
+                </thead>
+                <tbody id="cuerpo-dijkstra-red"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         VISTA 4: PASO A PASO (INSPECTOR DE LA ÚLTIMA TRANSFERENCIA EN LATEX)
+         ======================================================================= -->
+    <section id="vista-pasos" class="pg-view" hidden aria-label="Inspector paso a paso de la operación">
+      <div id="cajon-tecnico" data-open="true" class="pg-drawer rounded-3xl space-y-4">
+        <!-- Cabecera del Inspector: Pestañas de fases + Controles de reproducción -->
+        <div class="px-5 pt-4 pb-3 border-b border-slate-500/15 flex flex-wrap items-center justify-between gap-3">
+          <!-- Pestañas de módulos -->
+          <div role="tablist" class="flex items-center gap-1.5 flex-wrap">
+            <button
+              id="tab-rsa"
+              role="tab"
+              type="button"
+              aria-selected="true"
+              aria-controls="panel-rsa"
+              class="pg-tab px-3.5 py-2 text-xs sm:text-sm"
+            >
+              1. Criptografía RSA
+            </button>
+            <button
+              id="tab-grafo"
+              role="tab"
+              type="button"
+              aria-selected="false"
+              aria-controls="panel-grafo"
+              class="pg-tab px-3.5 py-2 text-xs sm:text-sm"
+            >
+              2. Grafo y Dijkstra
+            </button>
+            <button
+              id="tab-logica"
+              role="tab"
+              type="button"
+              aria-selected="false"
+              aria-controls="panel-logica"
+              class="pg-tab px-3.5 py-2 text-xs sm:text-sm"
+            >
+              3. Lógica Booleana e IA
+            </button>
+            <button
+              id="tab-terminal"
+              role="tab"
+              type="button"
+              aria-selected="false"
+              aria-controls="panel-terminal"
+              class="pg-tab px-3.5 py-2 text-xs sm:text-sm"
+            >
+              4. Bitácora de Pasos
+            </button>
+          </div>
+
+          <!-- Controles de Stepper ▶ ⏸ ⏭ + Velocidad + Modo Didáctico -->
+          <div class="flex items-center gap-2 flex-wrap">
+            <div id="barra-controles-pasos" class="flex items-center gap-1.5 flex-wrap">
+              <span id="indicador-paso-actual" class="font-mono-tabular text-xs font-bold px-2.5 py-1.5 rounded-xl pg-elevated">
+                Sin operación activa
+              </span>
+              <button
+                id="btn-play-pause"
+                type="button"
+                class="pg-btn-secondary px-3 py-1.5 rounded-xl text-xs font-bold"
+              >
+                ▶ Reproducir pasos
+              </button>
+              <button
+                id="btn-siguiente-paso"
+                type="button"
+                class="pg-btn-secondary px-3 py-1.5 rounded-xl text-xs font-bold"
+              >
+                ⏭ Siguiente
+              </button>
+              <select
+                id="select-velocidad"
+                class="pg-btn-secondary px-2.5 py-1.5 rounded-xl text-xs font-mono-tabular font-bold"
+              >
+                <option value="0.5">0.5x</option>
+                <option value="1" selected>1.0x</option>
+                <option value="2">2.0x</option>
+              </select>
+            </div>
+
+            <label
+              for="toggle-modo-didactico"
+              class="pg-btn-secondary px-3 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer"
+              title="Demostración académica del descifrado de bloques RSA"
+            >
+              <input
+                id="toggle-modo-didactico"
+                type="checkbox"
+                class="w-4 h-4 accent-amber-500 rounded cursor-pointer"
+              />
+              <span>Modo didáctico RSA</span>
+            </label>
+
+            <button
+              id="btn-cerrar-cajon"
+              type="button"
+              class="pg-btn-secondary px-3 py-1.5 rounded-xl text-xs font-bold"
+            >
+              Minimizar
+            </button>
+            <button id="btn-ver-como-funciona" type="button" class="hidden">Ver cómo funciona</button>
+          </div>
+        </div>
+
+        <!-- Paneles de las 4 pestañas del Stepper -->
+        <div class="p-5">
+          <div id="panel-rsa" role="tabpanel" aria-labelledby="tab-rsa"></div>
+          <div id="panel-grafo" role="tabpanel" aria-labelledby="tab-grafo" hidden></div>
+          <div id="panel-logica" role="tabpanel" aria-labelledby="tab-logica" hidden></div>
+
+          <!-- Pestaña Terminal en Stepper -->
+          <div id="panel-terminal" role="tabpanel" aria-labelledby="tab-terminal" hidden class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold uppercase tracking-wider pg-text-muted">
+                Registro secuencial de eventos (PINs enmascarados ••••)
+              </span>
+              <div class="flex items-center gap-2">
+                <button id="btn-copiar-terminal" type="button" class="pg-btn-secondary px-3 py-1.5 rounded-xl text-xs font-bold">
+                  <span id="texto-copiar-terminal">Copiar</span>
+                </button>
+                <button id="btn-limpiar-terminal" type="button" class="pg-btn-secondary px-3 py-1.5 rounded-xl text-xs font-bold">
+                  Limpiar
+                </button>
+              </div>
+            </div>
+            <div
+              id="terminal-logs"
+              role="log"
+              aria-live="polite"
+              class="pg-elevated rounded-2xl p-4 font-mono-tabular text-xs max-h-80 overflow-y-auto space-y-1 select-text"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         VISTA 5: FUNDAMENTOS MATEMÁTICOS (ECUACIONES FORMALES Y TEORÍA PURA)
+         ======================================================================= -->
+    <section id="vista-fundamentos" class="pg-view" hidden aria-label="Fundamentos matemáticos y arquitectura formal">
+      <div id="vista-fundamentos-raiz" class="space-y-6"></div>
+    </section>
+
+    <!-- =======================================================================
+         VISTA 6: AUDITORÍA Y TRAZAS CRIPTOGRÁFICAS
+         ======================================================================= -->
+    <section id="vista-auditoria" class="pg-view" hidden aria-label="Bitácora de auditoría y trazas criptográficas">
+      <div class="pg-surface rounded-3xl p-5 sm:p-6 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-500/15 pb-4">
+          <div>
+            <h3 class="text-base sm:text-lg font-extrabold">Bitácora Transaccional y Auditoría Criptográfica</h3>
+            <p class="text-xs pg-text-muted">
+              Registro inmutable de solicitudes, validaciones de entrada, tokens transmitidos y decisiones F(T)
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="btn-copiar-auditoria" type="button" class="pg-btn-secondary px-3.5 py-1.5 rounded-xl text-xs font-bold">
+              <span id="texto-copiar-auditoria">Copiar Bitácora</span>
+            </button>
+            <button id="btn-limpiar-auditoria" type="button" class="pg-btn-secondary px-3.5 py-1.5 rounded-xl text-xs font-bold">
+              Limpiar Pantalla
+            </button>
+          </div>
+        </div>
+
+        <div
+          id="terminal-logs-auditoria"
+          role="log"
+          aria-live="polite"
+          class="pg-elevated rounded-2xl p-4 font-mono-tabular text-xs max-h-[520px] overflow-y-auto space-y-1.5 select-text leading-relaxed"
+        ></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- MÓDULOS DEL NÚCLEO MATEMÁTICO (UMD clásico sin dependencias externas) -->
+  <script src="js/core/datos.js"></script>
+  <script src="js/core/rsa.js"></script>
+  <script src="js/core/grafo.js"></script>
+  <script src="js/core/reglas.js"></script>
+  <script src="js/core/transaccion.js"></script>
+
+  <!-- MÓDULOS DE INTERFAZ DE USUARIO (BACKOFFICE) -->
+  <script src="js/ui/latex.js"></script>
+  <script src="js/ui/router.js"></script>
+  <script src="js/ui/dashboard.js"></script>
+  <script src="js/ui/fundamentos.js"></script>
+  <script src="js/ui/canvas.js"></script>
+  <script src="js/ui/terminal.js"></script>
+  <script src="js/ui/panel.js"></script>
+  <script src="js/ui/escenarios.js"></script>
+  <script src="js/ui/main.js"></script>
+</body>
+</html>

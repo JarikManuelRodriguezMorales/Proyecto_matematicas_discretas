@@ -1,0 +1,114 @@
+{
+  "$schema": "https://tr.designtokens.org/format/",
+  "meta": {
+    "nombre": "PayGraph Design System Tokens",
+    "version": "1.0.0",
+    "proyecto": "Simulador de Pagos Digitales — Matemáticas Discretas (UDES)",
+    "figmaDesignFileKey": "mYZSybymT6PRKU89OrV29D",
+    "figjamBoardKey": "WQc2fIoUkVdml2QEpCxQDC",
+    "grillaBasePx": 8,
+    "subGrillaPx": 4
+  },
+  "color": {
+    "light": {
+      "bgCanvas": { "value": "#F4F7FB", "description": "Fondo principal del lienzo del grafo" },
+      "bgSurface": { "value": "#FFFFFF", "description": "Superficie de tarjetas y cajón técnico" },
+      "bgElevated": { "value": "#EEF2F8", "description": "Controles secundarios y chips" },
+      "textPrimary": { "value": "#0F172A", "description": "Texto principal (contraste 16.4:1 sobre blanco)" },
+      "textSecondary": { "value": "#334155", "description": "Etiquetas y subtítulos (contraste 9.3:1)" },
+      "textMuted": { "value": "#475569", "description": "Metadatos y pistas (contraste 6.7:1 AA)" },
+      "borderSubtle": { "value": "#CBD5E1", "description": "Bordes de contenedores y divisores" },
+      "borderFocus": { "value": "#0284C7", "description": "Anillo de foco visible para teclado" },
+      "accentPrimary": { "value": "#0369A1", "description": "Acción principal y nodo origen (contraste 5.9:1)" },
+      "accentDestination": { "value": "#6D28D9", "description": "Nodo destino y resaltado de llegada" },
+      "routeOptimal": { "value": "#0D9488", "description": "Arista y paquete de la ruta óptima de Dijkstra" },
+      "semanticSuccess": { "value": "#15803D", "description": "Estado aprobada F(T)=1 (contraste 5.1:1)" },
+      "semanticSuccessBg": { "value": "#DCFCE7", "description": "Fondo de alerta aprobada" },
+      "semanticWarning": { "value": "#B45309", "description": "Alerta de fraude IA C=1 (contraste 5.0:1)" },
+      "semanticWarningBg": { "value": "#FEF3C7", "description": "Fondo de alerta IA" },
+      "semanticDanger": { "value": "#B91C1C", "description": "Estado rechazada F(T)=0 y errores de campo (contraste 5.9:1)" },
+      "semanticDangerBg": { "value": "#FEE2E2", "description": "Fondo de estado rechazado" }
+    },
+    "dark": {
+      "bgCanvas": { "value": "#090D16", "description": "Fondo principal oscuro del lienzo del grafo" },
+      "bgSurface": { "value": "#111827", "description": "Superficie de tarjetas y cajón técnico en modo oscuro" },
+      "bgElevated": { "value": "#1E293B", "description": "Controles secundarios y chips en modo oscuro" },
+      "textPrimary": { "value": "#F8FAFC", "description": "Texto principal oscuro (contraste 17.1:1)" },
+      "textSecondary": { "value": "#CBD5E1", "description": "Subtítulos en modo oscuro (contraste 11.2:1)" },
+      "textMuted": { "value": "#94A3B8", "description": "Metadatos en modo oscuro (contraste 6.1:1 AA)" },
+      "borderSubtle": { "value": "#334155", "description": "Bordes en modo oscuro" },
+      "borderFocus": { "value": "#38BDF8", "description": "Anillo de foco visible en modo oscuro" },
+      "accentPrimary": { "value": "#38BDF8", "description": "Acción principal y nodo origen en modo oscuro" },
+      "accentDestination": { "value": "#C084FC", "description": "Nodo destino en modo oscuro" },
+      "routeOptimal": { "value": "#2DD4BF", "description": "Ruta óptima y paquete en modo oscuro" },
+      "semanticSuccess": { "value": "#4ADE80", "description": "Estado aprobada F(T)=1 en modo oscuro" },
+      "semanticSuccessBg": { "value": "#052E16", "description": "Fondo de alerta aprobada en modo oscuro" },
+      "semanticWarning": { "value": "#FBBF24", "description": "Alerta de fraude IA C=1 en modo oscuro" },
+      "semanticWarningBg": { "value": "#451A03", "description": "Fondo de alerta IA en modo oscuro" },
+      "semanticDanger": { "value": "#F87171", "description": "Estado rechazada F(T)=0 en modo oscuro" },
+      "semanticDangerBg": { "value": "#450A0A", "description": "Fondo de estado rechazado en modo oscuro" }
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+      "mono": "'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace"
+    },
+    "fontSize": {
+      "xs": { "value": "0.75rem", "lineHeight": "1.125rem", "px": 12 },
+      "sm": { "value": "0.875rem", "lineHeight": "1.25rem", "px": 14 },
+      "base": { "value": "1rem", "lineHeight": "1.5rem", "px": 16 },
+      "lg": { "value": "1.125rem", "lineHeight": "1.625rem", "px": 18 },
+      "xl": { "value": "1.25rem", "lineHeight": "1.75rem", "px": 20 }
+    },
+    "fontWeight": {
+      "regular": 400,
+      "medium": 500,
+      "semibold": 600,
+      "bold": 700
+    }
+  },
+  "spacing": {
+    "space1": { "value": "4px", "gridMultiplier": 0.5 },
+    "space2": { "value": "8px", "gridMultiplier": 1 },
+    "space3": { "value": "12px", "gridMultiplier": 1.5 },
+    "space4": { "value": "16px", "gridMultiplier": 2 },
+    "space6": { "value": "24px", "gridMultiplier": 3 },
+    "space8": { "value": "32px", "gridMultiplier": 4 },
+    "space12": { "value": "48px", "gridMultiplier": 6 },
+    "minTouchTarget": { "value": "44px", "description": "Objetivo táctil mínimo WCAG 2.2 AA" }
+  },
+  "radii": {
+    "sm": "6px",
+    "md": "10px",
+    "lg": "14px",
+    "xl": "20px",
+    "full": "9999px"
+  },
+  "elevation": {
+    "light": {
+      "card": "0 8px 24px -4px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04)",
+      "drawer": "0 -12px 32px -4px rgba(15, 23, 42, 0.14)",
+      "floating": "0 4px 14px rgba(15, 23, 42, 0.08)"
+    },
+    "dark": {
+      "card": "0 10px 28px -4px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35)",
+      "drawer": "0 -12px 36px -4px rgba(0, 0, 0, 0.70)",
+      "floating": "0 4px 16px rgba(0, 0, 0, 0.45)"
+    }
+  },
+  "motion": {
+    "durationFast": "120ms",
+    "durationBase": "200ms",
+    "durationDrawer": "280ms",
+    "durationShake": "180ms",
+    "easingOut": "cubic-bezier(0.22, 1, 0.36, 1)",
+    "routePacketDurationMs": 1100,
+    "playbackSpeeds": {
+      "slow": 0.5,
+      "normal": 1.0,
+      "fast": 2.0
+    },
+    "reducedMotionPolicy": "Desactiva traslaciones, vibración y recorrido continuo del paquete; aplica cambios de estado instantáneos."
+  }
+}

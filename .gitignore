@@ -1,0 +1,9 @@
+# Entornos virtuales de Python (tarea independiente CustomTkinter)
+.venv/
+extras/customtkinter/.venv/
+__pycache__/
+*.pyc
+
+# Archivos temporales del sistema operativo
+.DS_Store
+Thumbs.db
